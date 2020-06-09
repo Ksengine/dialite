@@ -16,7 +16,14 @@ class LinuxApp(BaseApp):
     """
 
     def works(self):
-        return test_call(['zenity', '--version'])
+        t = test_call(['zenity', '--version'])
+        if t:
+            return True
+        try:
+            check_output(["sudo","apt-get","install","zenity"])
+            return test_call(['zenity', '--version'])
+        except:
+            return False
 
     def fail(self, title, message):
         self._message('--error', title, message)
